@@ -40,23 +40,24 @@
 
     /* Suelo */
     .suelo {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 40px;
-      background: repeating-linear-gradient(90deg, #D4F4D9 0px, #D4F4D9 20px, #bfe6c5 20px, #bfe6c5 40px);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: repeating-linear-gradient(90deg, #D4F4D9 0px, #D4F4D9 20px, #bfe6c5 20px, #bfe6c5 40px);
     }
 
     /* Personaje Perrito */
     #perrito {
-      width: 70px;
-      height: 55px;
-      position: absolute;
-      bottom: 40px;
-      left: 40px;
-      font-size: 45px;
-      transition: bottom 0.1s ease;
-      z-index: 10;
+    width: 70px;
+    height: 55px;
+    position: absolute;
+    bottom: 40px; /* ✅ Queda JUSTO EN EL BORDE SUPERIOR DEL SUELO */
+    left: 40px;
+    font-size: 45px;
+    transform: scaleX(-1); /* ✅ VOLTEADO HACIA LA DERECHA (hacia donde corre) */
+    transition: bottom 0.1s ease;
+    z-index: 10;
     }
 
     /* Estados del perrito */
@@ -78,7 +79,7 @@
     /* Objetos generales */
     .objeto {
       position: absolute;
-      bottom: 40px;
+      bottom: 30px;
       right: -60px;
       font-size: 45px;
       animation: desplazar 2.2s linear infinite;
@@ -284,7 +285,7 @@ function crearObjeto(){
           obj.pasado=true;
           puntos++;
           actualizarPuntos();
-          if(puntos %10 ===0 && velocidad>1.2) velocidad -=0.15; // Acelera poco a poco
+          if(puntos %10 ===0 && velocidad>1.6) velocidad -=0.08; // Acelera poco a poco
         }
       }
     }
@@ -309,12 +310,12 @@ function finJuego(){
 }
 
 function iniciarJuego(){
-  puntos=0; velocidad=2.2; jugando=true;
+  puntos=0; velocidad=3.2; jugando=true;
   actualizarPuntos();
   mensajeFin.classList.add('oculto');
   document.querySelectorAll('.objeto').forEach(o=>o.remove());
   clearInterval(temporizadorObjetos);
-  temporizadorObjetos = setInterval(crearObjeto, 1100);
+  temporizadorObjetos = setInterval(crearObjeto, 1400);
 }
 
 // ========== CONTROL TECLAS ==========
