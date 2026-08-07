@@ -62,7 +62,7 @@
 
     /* Estados del perrito */
     .saltando { animation: salto 0.6s ease-out; }
-    .agachado { height: 35px; transform: scaleY(0.65); transform-origin: bottom; }
+    .agachado { height: 35px; transform: scaleY(0.65); transform-origin: bottom; bottom: 28px !important;}
     .ladrando { animation: ladrido 0.3s ease 2; }
 
     @keyframes salto {
@@ -81,10 +81,12 @@
       position: absolute;
       bottom: 30px;
       right: -60px;
-      font-size: 45px;
+      font-size: 35px;
       animation: desplazar 2.2s linear infinite;
+      transform: scale(0.75); /* ✅ Reducción EXACTA al 75% = -25% */
+      transform-origin: bottom center; /* Para que reduzcan desde abajo, no floten */
     }
-    .alto { bottom: 110px; } /* Para agacharse y esquivar */
+    .alto { bottom: 65px; } /* Para agacharse y esquivar */
     .destruible { transition: opacity 0.2s, transform 0.2s; }
     .eliminado { opacity: 0; transform: scale(0); }
 
@@ -237,7 +239,7 @@ function ladrar(){
     document.querySelectorAll('.destruible').forEach(obj=>{
       const pos = obj.getBoundingClientRect();
       const perPos = perrito.getBoundingClientRect();
-      if(pos.left - perPos.left < 130 && pos.left - perPos.left > 0){
+      if(pos.left - perPos.left < 100 && pos.left - perPos.left > 0){
         obj.classList.add('eliminado');
         puntos +=5;
         actualizarPuntos();
@@ -268,7 +270,7 @@ function crearObjeto(){
     const pObj = obj.getBoundingClientRect();
 
     // Rango de choque
-    if(pObj.left < pPer.right -15 && pObj.right > pPer.left +15 && pObj.bottom > pPer.top +10){
+    if(pObj.left < pPer.right -30 && pObj.right > pPer.left +5 && pObj.bottom > pPer.top +8){
       let golpe = true;
 
       // Verificar si esquivó bien
