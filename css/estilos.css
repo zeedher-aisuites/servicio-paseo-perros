@@ -47,14 +47,16 @@ body::before{
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 999; /* ⚠️ MUY ALTO: siempre arriba */
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(10px);
-  border-radius: 0 0 var(--redondeo) var(--redondeo);
-  overflow: visible;
-  box-shadow: var(--sombra-cute);
+  z-index: 999;
+  /* ✅ Fondo SUAVE, transparente, combina con el fondo kawaii */
+  background: rgba(255, 255, 255, 0.75); /* Blanco muy suave */
+  backdrop-filter: blur(12px); /* Efecto vidrio elegante */
+  -webkit-backdrop-filter: blur(12px);
+  border-radius:0 0 var(--redondeo) var(--redondeo);
+  box-shadow: 0 4px 15px rgba(148, 184, 224, 0.15); /* Sombra azul pastel suave */
   padding:1rem 0;
 }
+
 /* Menú colapsado: asegurar que salga por ENCIMA */
 .navbar-collapse {
   z-index: 1000;
@@ -70,23 +72,28 @@ body::before{
   z-index: 1000;
 }
 /* Botón hamburguesa: también arriba */
-.navbar-toggler {
-  position: relative;
-  z-index: 1001;
+.navbar-toggler{
   border: none;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+}
+.navbar-toggler-icon{
+  filter: invert(40%) sepia(20%) saturate(400%) hue-rotate(240deg); /* Color oscuro suave */
 }
 .navbar-brand{
   font-weight:800; font-size:1.35rem;
+  /* Degradado AZUL HEELER + COBRE HEELER = tus colores protagonistas */
   background: linear-gradient(90deg, var(--azul-heeler), var(--cobre-heeler));
   -webkit-background-clip: text;
   color:transparent !important;
 }
 .nav-link{
   font-weight:700; margin:0 0.5rem;
+  color: var(--texto-oscuro) !important; /* Texto legible suave */
   transition: all 0.3s ease;
 }
 .nav-link:hover{
-  color:var(--acento-corazon) !important;
+  color:var(--acento-corazon) !important; /* Rosa dulce al pasar */
   transform: scale(1.08);
 }
 
