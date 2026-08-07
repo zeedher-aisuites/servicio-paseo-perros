@@ -1,111 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap');
 
 :root {
-    --base-fondo: #FAFCF9;
-    --marca-principal: #15803D;
-    --marca-suave: #86EFAC;
-    --acento-vibrante: #EA580C;
-    --texto-oscuro: #0F172A;
-    --texto-medio: #475569;
-    --vidrio: rgba(255,255,255,0.65);
-    --borde-vidrio: rgba(255,255,255,0.3);
-    --sombra-suave: 0 10px 40px rgba(21, 128, 61, 0.08);
-    --sombra-media: 0 12px 28px rgba(234, 88, 12, 0.12);
-    --trans: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --fondo-base: #FFF8E6;
+  --rosa-dulce: #FDCEDF;
+  --azul-cielo: #C7E2FF;
+  --verde-menta: #D4F4D9;
+  --azul-heeler: #94B8E0;
+  --cobre-heeler: #E88C60;
+  --texto-oscuro: #5A4A66;
+  --acento-corazon: #FF8FB1;
+  --sombra-cute: 0 8px 20px rgba(160, 120, 200, 0.12);
+  --redondeo: 22px;
 }
 
-* {margin:0; padding:0; box-sizing:border-box;}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background:var(--base-fondo);
-    color:var(--texto-medio);
-    line-height:1.6;
-}
-@media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.01ms !important; transition:none !important;}
+  font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--fondo-base);
+  /* 👇 TU FONDO PERSONALIZADO */
+  background-image: url('../imagenes/fondo-heelers-kawaii.jpg');
+  background-size: 600px auto; /* tamaño ideal para repetir lindo */
+  background-repeat: repeat;
+  background-attachment: fixed;
+  background-position: center top;
+  color: var(--texto-oscuro);
+  line-height: 1.6;
 }
 
-/* === NAVEGACIÓN PREMIUM VIDRIO === */
-.navbar {
-    position:sticky; top:0; z-index:99;
-    background:var(--vidrio); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--borde-vidrio);
-    box-shadow:var(--sombra-suave);
-    padding:1.2rem 0; transition:var(--trans);
+/* Capa transparente ligera para que texto resalte SIEMPRE */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,252,242,0.82);
+  z-index:-1;
 }
-.navbar.scrolled{padding:0.7rem 0; background:rgba(255,255,255,0.8);}
+
+/* 🧭 Navegación dulce */
+.navbar{
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  border-radius:0 0 var(--redondeo) var(--redondeo);
+  box-shadow: var(--sombra-cute);
+  padding:1rem 0;
+}
 .navbar-brand{
-    font-weight:800; font-size:1.35rem; color:var(--marca-principal) !important; letter-spacing:-0.25px;
+  font-weight:800; font-size:1.35rem;
+  background: linear-gradient(90deg, var(--azul-heeler), var(--cobre-heeler));
+  -webkit-background-clip: text;
+  color:transparent !important;
 }
 .nav-link{
-    font-weight:500; color:var(--texto-oscuro) !important; margin:0 0.6rem; position:relative; transition:var(--trans);
+  font-weight:700; margin:0 0.5rem;
+  transition: all 0.3s ease;
 }
-.nav-link:hover{color:var(--acento-vibrante) !important;}
-.nav-link.active{color:var(--acento-vibrante) !important;}
-.nav-link.active::after, .nav-link:hover::after{
-    content:""; position:absolute; bottom:0; left:20%; width:60%; height:3px;
-    background:var(--acento-vibrante); border-radius:10px; transition:width 0.3s ease;
+.nav-link:hover{
+  color:var(--acento-corazon) !important;
+  transform: scale(1.08);
 }
 
-/* === BOTONES JERARQUIZADOS === */
+/* 🎀 Tarjetas, bloques y cajas */
+.card, .tarjeta, .testimonio, .bloque-referido{
+  background:rgba(255,255,255,0.85);
+  border-radius:var(--redondeo);
+  box-shadow:var(--sombra-cute);
+  border:3px solid transparent;
+  background-image: linear-gradient(white,white), linear-gradient(135deg, var(--rosa-dulce), var(--azul-cielo));
+  background-origin:border-box;
+  background-clip:padding-box, border-box;
+  transition: all 0.4s ease;
+}
+.card:hover, .tarjeta:hover{
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 25px rgba(255, 143, 177, 0.2);
+}
+
+/* 💖 Botones llamativos y tiernos */
 .btn-principal{
-    background:linear-gradient(135deg, var(--acento-vibrante), #C2410C); color:white; font-weight:700; font-size:1.05rem;
-    padding:0.95rem 2.4rem; border-radius:16px; border:none; box-shadow:var(--sombra-media); transition:var(--trans);
+  background: linear-gradient(135deg, var(--acento-corazon), #FF9EAA);
+  color:white; font-weight:800;
+  border-radius:50px;
+  padding:0.9rem 2.2rem;
+  border:none;
+  box-shadow: 0 6px 15px rgba(255, 143, 177, 0.3);
+  transition: all 0.35s ease;
 }
-.btn-principal:hover{transform:translateY(-4px) scale(1.02); box-shadow:0 16px 35px rgba(234,88,12,0.22); color:white;}
-.btn-secundario{
-    background:white; color:var(--marca-principal); font-weight:600; border:2px solid var(--marca-suave);
-    padding:0.75rem 1.8rem; border-radius:14px; transition:var(--trans);
-}
-.btn-secundario:hover{background:var(--marca-principal); color:white; border-color:var(--marca-principal); transform:translateY(-3px);}
-
-/* === HERO INMERSIVO === */
-.hero{
-    padding:5.5rem 0 4.5rem;
-    background:radial-gradient(circle at top, rgba(134,239,172,0.22), transparent 65%);
-}
-.hero h1{
-    font-size:clamp(2.4rem,5vw,4.2rem); font-weight:800; color:var(--marca-principal);
-    line-height:1.15; margin-bottom:1.5rem; letter-spacing:-0.5px;
-}
-.hero .destacado-descuento{
-    display:inline-block; background:var(--acento-vibrante); color:white; padding:0.25rem 1rem; border-radius:12px; font-weight:700; margin-bottom:1.2rem;
-}
-.hero p{font-size:clamp(1.1rem,2vw,1.4rem); max-width:780px; margin:0 auto 2.2rem;}
-
-/* === TARJETAS ELEVADAS INTERACTIVAS === */
-.tarjeta{
-    background:white; border-radius:20px; padding:2rem; box-shadow:var(--sombra-suave);
-    transition:var(--trans); border:1px solid transparent; height:100%;
-}
-.tarjeta:hover{
-    transform:translateY(-8px); box-shadow:0 18px 45px rgba(21,128,61,0.11);
-    border-color:rgba(234,88,12,0.2);
-}
-.tarjeta h3{color:var(--marca-principal); font-weight:700; margin-bottom:1rem;}
-
-/* === BLOQUE DESTACADO REFERIDOS === */
-.bloque-referido{
-    background:linear-gradient(120deg, rgba(234,88,12,0.08), rgba(252,175,55,0.12));
-    border-radius:24px; padding:2.5rem; border:2px solid rgba(234,88,12,0.25); text-align:center;
+.btn-principal:hover{
+  transform:scale(1.07);
+  box-shadow: 0 9px 20px rgba(255, 143, 177, 0.4);
 }
 
-/* === GALERÍA Y TESTIMONIOS === */
-.img-galeria{height:230px; object-fit:cover; border-radius:16px; transition:transform 0.4s ease; width:100%;}
-.img-galeria:hover{transform:scale(1.04);}
-.testimonio{background:white; border-left:4px solid var(--acento-vibrante); border-radius:16px; padding:1.8rem; box-shadow:var(--sombra-suave);}
+/* ✨ Animaciones kawaii */
+@keyframes flotar {
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0);}
+}
+@keyframes latido {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
+.flotar{animation: flotar 3s ease-in-out infinite;}
+.corazon-latido{animation: latido 1.8s ease-in-out infinite;}
 
-/* === ANIMACIONES ENTRADA ESCALONADA === */
-.fade-up{opacity:0; transform:translateY(30px); transition:opacity 0.7s ease-out, transform 0.7s ease-out;}
+.fade-up{
+  opacity:0; transform:translateY(25px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
 .fade-up.visible{opacity:1; transform:translateY(0);}
 
-/* === FOOTER SOFISTICADO === */
-footer{background:var(--marca-principal); color:white; padding:3.5rem 0 1.5rem; margin-top:5rem;}
-footer hr{border-color:rgba(255,255,255,0.15); margin:1.5rem 0;}
+/* 🐾 Galería imágenes */
+.img-galeria{
+  border-radius:var(--redondeo);
+  border:4px solid;
+  border-image: linear-gradient(90deg, var(--azul-heeler), var(--cobre-heeler)) 1;
+}
 
-/* === RESPONSIVO ESTRICTO === */
+/* Pie página */
+footer{
+  background: linear-gradient(135deg, var(--azul-cielo), var(--rosa-dulce));
+  color:var(--texto-oscuro);
+  border-radius: var(--redondeo) var(--redondeo) 0 0;
+}
+
+/* Adaptación móvil */
 @media(max-width:768px){
-    .hero{padding:3rem 0 2.5rem; text-align:center;}
-    .tarjeta{padding:1.5rem;}
-    .bloque-referido{padding:1.5rem;}
+  body{background-size:400px auto;}
+}
+@media (prefers-reduced-motion: reduce){
+  *, .flotar, .corazon-latido{animation:none !important; transition:none !important;}
 }
