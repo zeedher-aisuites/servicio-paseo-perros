@@ -52,18 +52,31 @@
     width: 70px;
     height: 55px;
     position: absolute;
-    bottom: 40px; /* ✅ Queda JUSTO EN EL BORDE SUPERIOR DEL SUELO */
+    bottom: 32px;
     left: 40px;
     font-size: 45px;
-    transform: scaleX(-1); /* ✅ VOLTEADO HACIA LA DERECHA (hacia donde corre) */
+    background: url("imagenes/perrito-normal.png") center/contain no-repeat;
+    transform: scaleX(1);
     transition: bottom 0.1s ease;
     z-index: 10;
     }
 
     /* Estados del perrito */
-    .saltando { animation: salto 0.6s ease-out; }
-    .agachado { height: 35px; transform: scaleY(0.65); transform-origin: bottom; bottom: 28px !important;}
-    .ladrando { animation: ladrido 0.3s ease 2; }
+    .saltando {
+      background-image: url("imagenes/perrito-saltando.png") !important;
+      animation: salto 0.6s ease-out;
+    }
+    .agachado {
+      background-image: url("imagenes/perrito-agachado.png") !important;
+      height: 35px;
+      transform: scaleX(-1) scaleY(0.65); /* mantiene volteo + aplasta */
+      transform-origin: bottom;
+      bottom: 28px !important;
+    }
+    .ladrando {
+      background-image: url("imagenes/perrito-ladrando.png") !important;
+      animation: ladrido 0.3s ease 2;
+    }
 
     @keyframes salto {
       0% { bottom: 40px; }
@@ -165,7 +178,7 @@
   <!-- 🎯 ÁREA DEL JUEGO -->
   <div id="areaJuego">
     <div class="suelo"></div>
-    <div id="perrito">🐕</div>
+    <div id="perrito"></div>
 
     <div id="mensaje" class="mensaje-fin oculto">
       <h3>💥 ¡Terminó el juego!</h3>
