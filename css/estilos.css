@@ -103,11 +103,16 @@ body::before{
 }
 @keyframes latido {
   0%{transform:scale(1);}
-  50%{transform:scale(1.1);}
+  50%{transform:scale(1.15);} /* Más visible */
   100%{transform:scale(1);}
 }
-.flotar{animation: flotar 3s ease-in-out infinite;}
-.corazon-latido{animation: latido 1.8s ease-in-out infinite;}
+.flotar{
+  animation: flotar 3s ease-in-out infinite;
+}
+.corazon-latido{
+  animation: latido 1.8s ease-in-out infinite;
+  display: inline-block; /* ✅ CLAVE PERDIDA: permite escalar correctamente */
+}
 
 .fade-up{
   opacity:0; transform:translateY(25px);
