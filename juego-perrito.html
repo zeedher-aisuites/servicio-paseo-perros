@@ -145,6 +145,29 @@
       #perrito { width:60px; height:48px; }
       .objeto { font-size:28px; }
     }
+    /* ====== ✅ CONTROLES TÁCTILES ====== */
+    .controles-tactiles{
+      display:none;
+      gap:1.5rem;
+      justify-content:center;
+      margin-top:1rem;
+      margin-bottom:1rem;
+    }
+    .btn-tactil{
+      padding:12px 28px;
+      font-size:18px;
+      border-radius:12px;
+      border:none;
+      background:var(--perrito-cobre);
+      color:white;
+      font-weight:bold;
+      box-shadow: 0 4px 8px rgba(232,140,96,0.3);
+    }
+    .btn-tactil:active{ transform:scale(0.95); }
+
+    @media(max-width: 600px){
+      .controles-tactiles{ display:flex; } /* 📱 Solo aparecen en celulares */      
+    }
   </style>
 </head>
 <body>
@@ -194,6 +217,12 @@
     <p class="fw-bold mb-1">🎹 ¿Cómo jugar?</p>
     <span>⬆️ <b>Arriba</b> = Saltar 🐇💧🪵 | </span>
     <span>➡️ <b>Derecha</b> = Ladrar 💥🐈🏍️</span>
+  </div>
+
+  <!-- ✅ BOTONES PARA PANTALLAS TÁCTILES -->
+  <div class="controles-tactiles">
+    <button class="btn-tactil" ontouchstart="saltar(); return false;">⬆️ Saltar</button>
+    <button class="btn-tactil" ontouchstart="ladrar(); return false;">➡️ Ladrar</button>
   </div>
 </main>
 
