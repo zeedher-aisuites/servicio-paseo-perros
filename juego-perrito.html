@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego Perrito Heeler 🐾 | Paseos Perrunos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  <style>
+    /* ---------- ESTILOS EXCLUSIVOS DEL JUEGO ---------- */
+    :root {
+      --perrito-azul: #94B8E0;
+      --perrito-cobre: #E88C60;
+      --fondo-juego: #FFF8E6;
+      --borde-suave: #C7E2FF;
+      --texto-juego: #5A4A66;
+    }
+
+    body {
+      background: var(--fondo-juego);
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 1rem;
+    }
+
+    /* Contenedor área de juego */
+    #areaJuego {
+      width: min(95%, 800px);
+      height: 220px;
+      margin: 2rem auto;
+      background: linear-gradient(#e0f0ff, #f0e6ff);
+      border: 4px solid var(--borde-suave);
+      border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--sombra-cute);
+    }
+
+    /* Suelo */
+    .suelo {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background: repeating-linear-gradient(90deg, #D4F4D9 0px, #D4F4D9 20px, #bfe6c5 20px, #bfe6c5 40px);
+    }
+
+    /* Personaje Perrito */
+    #perrito {
+      width: 70px;
+      height: 55px;
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      font-size: 45px;
+      transition: bottom 0.1s ease;
+      z-index: 10;
+    }
+
+    /* Estados del perrito */
+    .saltando { animation: salto 0.6s ease-out; }
+    .agachado { height: 35px; transform: scaleY(0.65); transform-origin: bottom; }
+    .ladrando { animation: ladrido 0.3s ease 2; }
+
+    @keyframes salto {
+      0% { bottom: 40px; }
+      50% { bottom: 110px; }
+      100% { bottom: 40px; }
+    }
+    @keyframes ladrido {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25) rotate(6deg); }
+      100% { transform: scale(1); }
+    }
+
+    /* Objetos generales */
+    .objeto {
+      position: absolute;
+      bottom: 40px;
+      right: -60px;
+      font-size: 45px;
+      animation: desplazar 2.2s linear infinite;
+    }
+    .alto { bottom: 110px; } /* Para agacharse y esquivar */
+    .destruible { transition: opacity 0.2s, transform 0.2s; }
+    .eliminado { opacity: 0; transform: scale(0); }
+
+    @keyframes desplazar {
+      0% { right: -60px; }
+      100% { right: 110%; }
+    }
+
+    /* Marcadores y mensajes */
+    .info-juego {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--texto-juego);
+    }
+    .puntuacion {
+      font-size: 1.4rem;
+      color: var(--acento-corazon);
+      font-weight: 800;
+    }
+    .mensaje-fin {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.92);
+      padding: 2rem;
+      border-radius: 22px;
+      text-align: center;
+      border:3px solid var(--azul-heeler);
+      z-index:20;
+    }
+    .oculto { display: none; }
+
+    /* Controles guía */
+    .controles {
+      max-width: 700px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.7);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: var(--sombra-cute);
+    }
+  </style>
+</head>
+<body>
+
+<!-- 🧭 MISMA NAVEGACIÓN -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">🐕 Paseos Perrunos</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">🏠 Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="galeria-testimonios.html">Galería & Clientes</a></li>
+        <li class="nav-item"><a class="nav-link" href="referidos.html">Refiere y Ahorra</a></li>
+        <li class="nav-item"><a class="nav-link" href="adopciones.html">Adopciones</a></li>
+        <li class="nav-item"><a class="nav-link" href="proveedores.html">Proveedores</a></li>
+        <li class="nav-item"><a class="nav-link" href="reservas.html">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" href="anime.html">Anime</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <h1 class="flotar text-center">🎮 ¡Corre y esquiva, Perrito Heeler! 🐶💨</h1>
+
+  <div class="info-juego mb-2">
+    Puntos: <span id="puntos" class="puntuacion">0</span>
+  </div>
+
+  <!-- 🎯 ÁREA DEL JUEGO -->
+  <div id="areaJuego">
+    <div class="suelo"></div>
+    <div id="perrito">🐕</div>
+
+    <div id="mensaje" class="mensaje-fin oculto">
+      <h3>💥 ¡Terminó el juego!</h3>
+      <p>Puntuación final: <span id="finalPts"></span></p>
+      <button onclick="iniciarJuego()" class="btn-principal mt-2">🔄 Volver a jugar</button>
+      <br><a href="index.html" class="btn-kawaii mt-2 d-inline-block">🏡 Volver al inicio</a>
+    </div>
+  </div>
+
+  <!-- 📋 CONTROLES CLAROS -->
+  <div class="controles text-center">
+    <p class="fw-bold mb-1">🎹 ¿Cómo jugar?</p>
+    <span>⬆️ <b>Arriba</b> = Saltar 🐇💧🪵 | </span>
+    <span>⬇️ <b>Abajo</b> = Agacharse 👽 | </span>
+    <span>➡️ <b>Derecha</b> = Ladrar 💥🐈🏍️</span>
+  </div>
+</main>
+
+<footer>© 2026 Paseos Perrunos - Todos los derechos reservados</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// ========== VARIABLES GLOBALES ==========
+const perrito = document.getElementById('perrito');
+const areaJuego = document.getElementById('areaJuego');
+const puntosElem = document.getElementById('puntos');
+const mensajeFin = document.getElementById('mensaje');
+const finalPts = document.getElementById('finalPts');
+
+let puntos = 0;
+let jugando = false;
+let velocidad = 2.2;
+let temporizadorObjetos;
+let saltoActivo = false;
+let agachadoActivo = false;
+
+// Lista completa de objetos con reglas EXACTAS que pediste
+const listaObjetos = [
+  {emoji:'🐇', tipo:'saltar'},    // Saltar para esquivar
+  {emoji:'💧', tipo:'saltar'},    // Charco: saltar
+  {emoji:'🪵', tipo:'saltar'},    // Tronco: saltar
+  {emoji:'👽', tipo:'agachar'},   // Ovni: agacharse
+  {emoji:'🐈', tipo:'ladrar'},    // Gato: ladrar para destruir
+  {emoji:'🏍️', tipo:'ladrar'}    // Moto: ladrar para destruir
+];
+
+// ========== FUNCIONES DE ACCIONES ==========
+function saltar(){
+  if(!saltoActivo && jugando){
+    saltoActivo = true;
+    perrito.classList.add('saltando');
+    setTimeout(()=>{
+      perrito.classList.remove('saltando');
+      saltoActivo = false;
+    },600);
+  }
+}
+
+function agachar(activar){
+  if(jugando){
+    agachadoActivo = activar;
+    activar ? perrito.classList.add('agachado') : perrito.classList.remove('agachado');
+  }
+}
+
+function ladrar(){
+  if(jugando){
+    perrito.classList.add('ladrando');
+    setTimeout(()=> perrito.classList.remove('ladrando'), 600);
+    // Detectar y destruir objetos destruibles cercanos
+    document.querySelectorAll('.destruible').forEach(obj=>{
+      const pos = obj.getBoundingClientRect();
+      const perPos = perrito.getBoundingClientRect();
+      if(pos.left - perPos.left < 130 && pos.left - perPos.left > 0){
+        obj.classList.add('eliminado');
+        puntos +=5;
+        actualizarPuntos();
+        setTimeout(()=> obj.remove(),200);
+      }
+    });
+  }
+}
+
+// ========== CREAR OBJETOS Y COLISIONES ==========
+function crearObjeto(){
+  const info = listaObjetos[Math.floor(Math.random() * listaObjetos.length)];
+  const obj = document.createElement('div');
+  obj.className = 'objeto';
+  obj.innerText = info.emoji;
+  obj.dataset.tipo = info.tipo;
+
+  // Posición alta solo para ovni
+  if(info.tipo === 'agachar') obj.classList.add('alto');
+  if(info.tipo === 'ladrar') obj.classList.add('destruible');
+
+  areaJuego.appendChild(obj);
+  obj.style.animationDuration = `${velocidad}s`;
+
+  // Verificar colisión
+  const revisarColision = setInterval(()=>{
+    const pPer = perrito.getBoundingClientRect();
+    const pObj = obj.getBoundingClientRect();
+
+    // Rango de choque
+    if(pObj.left < pPer.right -15 && pObj.right > pPer.left +15 && pObj.bottom > pPer.top +10){
+      let golpe = true;
+
+      // Verificar si esquivó bien
+      if(info.tipo === 'saltar' && saltoActivo) golpe=false;
+      if(info.tipo === 'agachar' && agachadoActivo) golpe=false;
+      if(info.tipo === 'ladrar' && obj.classList.contains('eliminado')) golpe=false;
+
+      if(golpe){
+        clearInterval(revisarColision);
+        finJuego();
+      } else {
+        // Pasó bien = suma puntos
+        if(pObj.right < pPer.left && !obj.pasado){
+          obj.pasado=true;
+          puntos++;
+          actualizarPuntos();
+          if(puntos %10 ===0 && velocidad>1.2) velocidad -=0.15; // Acelera poco a poco
+        }
+      }
+    }
+
+    // Quitar si salió fuera
+    if(pObj.right <0){
+      clearInterval(revisarColision);
+      obj.remove();
+    }
+  },50);
+}
+
+function actualizarPuntos(){
+  puntosElem.innerText = puntos;
+}
+
+function finJuego(){
+  jugando=false;
+  clearInterval(temporizadorObjetos);
+  finalPts.innerText = puntos;
+  mensajeFin.classList.remove('oculto');
+}
+
+function iniciarJuego(){
+  puntos=0; velocidad=2.2; jugando=true;
+  actualizarPuntos();
+  mensajeFin.classList.add('oculto');
+  document.querySelectorAll('.objeto').forEach(o=>o.remove());
+  clearInterval(temporizadorObjetos);
+  temporizadorObjetos = setInterval(crearObjeto, 1100);
+}
+
+// ========== CONTROL TECLAS ==========
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowUp'){ saltar(); e.preventDefault(); }
+  if(e.key==='ArrowDown'){ agachar(true); e.preventDefault(); }
+  if(e.key==='ArrowRight'){ ladrar(); e.preventDefault(); }
+});
+document.addEventListener('keyup',e=>{
+  if(e.key==='ArrowDown') agachar(false);
+});
+
+// Inicio automático al cargar
+window.onload = iniciarJuego;
+</script>
+</body>
+</html>
