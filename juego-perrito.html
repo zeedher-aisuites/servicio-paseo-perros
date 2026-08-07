@@ -7,23 +7,18 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/estilos.css">
 
-  <!-- ✅ PRECARGA DE IMÁGENES (etiqueta script correcta) -->
+  <!-- ✅ Precarga imágenes -->
   <script>
     const imagenes = [
       "imagenes/perrito-normal.png",
       "imagenes/perrito-saltando.png",
-      "imagenes/perrito-agachado.png",
       "imagenes/perrito-ladrando.png"
     ];
-    imagenes.forEach(ruta => {
-      const img = new Image();
-      img.src = ruta;
-    });
+    imagenes.forEach(ruta => { const img = new Image(); img.src = ruta; });
   </script>
 
   <style>
-    /* ---------- ESTILOS EXCLUSIVOS DEL JUEGO ---------- */
-    /* 📌 VARIABLES PRIMERO: disponibles para todo el resto */
+    /* ---------- ESTILOS ---------- */
     :root {
       --perrito-azul: #94B8E0;
       --perrito-cobre: #E88C60;
@@ -37,11 +32,8 @@
       overflow-x: hidden;
     }
 
-    h1 {
-      margin-top: 1rem;
-    }
+    h1 { margin-top: 1rem; }
 
-    /* Área de juego */
     #areaJuego {
       width: min(95%, 800px);
       height: 220px;
@@ -62,7 +54,7 @@
       background: repeating-linear-gradient(90deg, #D4F4D9 0px, #D4F4D9 20px, #bfe6c5 20px, #bfe6c5 40px);
     }
 
-    /* 🐕 PERRITO CON IMÁGENES + SIEMPRE MIRA A LA DERECHA */
+    /* 🐕 SIN VOLTEO: orientación correcta tal cual tu imagen */
     #perrito {
       width: 70px;
       height: 55px;
@@ -72,7 +64,6 @@
       background: url("imagenes/perrito-normal.png") center/contain no-repeat;
       background-size: contain;
       background-position: bottom center;
-      transform: scaleX(-1);
       transition: bottom 0.1s ease;
       image-rendering: pixelated;
       backface-visibility: hidden;
@@ -81,19 +72,10 @@
 
     .saltando {
       background-image: url("imagenes/perrito-saltando.png") !important;
-      transform: scaleX(-1);
       animation: salto 0.6s ease-out;
-    }
-    .agachado {
-      background-image: url("imagenes/perrito-agachado.png") !important;
-      height: 35px;
-      transform: scaleX(-1) scaleY(0.65);
-      transform-origin: bottom;
-      bottom: 28px !important;
     }
     .ladrando {
       background-image: url("imagenes/perrito-ladrando.png") !important;
-      transform: scaleX(-1);
       animation: ladrido 0.3s ease 2;
     }
 
@@ -103,12 +85,12 @@
       100% { bottom: 32px; }
     }
     @keyframes ladrido {
-      0% { transform: scaleX(-1) scale(1); }
-      50% { transform: scaleX(-1) scale(1.25) rotate(6deg); }
-      100% { transform: scaleX(-1) scale(1); }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25) rotate(6deg); }
+      100% { transform: scale(1); }
     }
 
-    /* 🧱 OBJETOS - reducidos 25% */
+    /* 🧱 Objetos */
     .objeto {
       position: absolute;
       bottom: 32px;
@@ -118,7 +100,6 @@
       transform-origin: bottom center;
       animation: desplazar 3.2s linear infinite;
     }
-    .alto { bottom: 65px; } /* Ovni bajo -> obliga agacharse */
     .destruible { transition: opacity 0.2s, transform 0.2s; }
     .eliminado { opacity: 0; transform: scale(0); }
 
@@ -127,7 +108,6 @@
       100% { right: 110%; }
     }
 
-    /* Info y mensajes */
     .info-juego {
       text-align: center;
       font-size: 1.2rem;
@@ -161,7 +141,6 @@
       box-shadow: var(--sombra-cute, 0 4px 12px rgba(148,184,224,0.15));
     }
 
-    /* 📱 RESPONSIVO AL FINAL (sobrescribe bien) */
     @media(max-width: 600px){
       #perrito { width:60px; height:48px; }
       .objeto { font-size:28px; }
@@ -170,7 +149,7 @@
 </head>
 <body>
 
-<!-- 🧭 MISMA NAVEGACIÓN DEL SITIO -->
+<!-- 🧭 Navegación -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="index.html">🐕 Paseos Perrunos</a>
@@ -193,7 +172,7 @@
 </nav>
 
 <main class="container">
-  <h1 class="flotar text-center">🎮 ¡Corre y esquiva, Perrito Heeler! 🐶💨</h1>
+  <h1 class="flotar text-center">🎮 ¡Corre y salta, Perrito Heeler! 🐶💨</h1>
 
   <div class="info-juego mb-2">
     Puntos: <span id="puntos" class="puntuacion">0</span>
@@ -214,7 +193,6 @@
   <div class="controles text-center">
     <p class="fw-bold mb-1">🎹 ¿Cómo jugar?</p>
     <span>⬆️ <b>Arriba</b> = Saltar 🐇💧🪵 | </span>
-    <span>⬇️ <b>Abajo</b> = Agacharse 👽 | </span>
     <span>➡️ <b>Derecha</b> = Ladrar 💥🐈🏍️</span>
   </div>
 </main>
@@ -223,7 +201,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ========== VARIABLES GLOBALES ==========
+// ========== VARIABLES ==========
 const perrito = document.getElementById('perrito');
 const areaJuego = document.getElementById('areaJuego');
 const puntosElem = document.getElementById('puntos');
@@ -235,57 +213,71 @@ let jugando = false;
 let velocidad = 3.2;
 let temporizadorObjetos;
 let saltoActivo = false;
-let agachadoActivo = false;
-let teclaBloqueada = false; // Evita pulsaciones repetidas muy rápido
-let distanciaMinima = 1400; // 📏 Distancia inicial ampliada entre objetos
-let separacionExtra = 300;
+let ladrandoActivo = false;
+
+let distanciaMinima = 3800;   // Empieza MUY separado
+let separacionExtra = 120;    // Se reduce POCO cada 10 puntos (antes 150, más suave)
+const DISTANCIA_MINIMA_SEGURA = 2900; // 🛑 LÍMITE INFRANQUEABLE: JAMÁS BAJA DE AQUÍ
 
 const listaObjetos = [
   {emoji:'🐇', tipo:'saltar'},
   {emoji:'💧', tipo:'saltar'},
   {emoji:'🪵', tipo:'saltar'},
-  {emoji:'👽', tipo:'agachar'},
   {emoji:'🐈', tipo:'ladrar'},
   {emoji:'🏍️', tipo:'ladrar'}
 ];
 
-// ========== FUNCIONES ACCIONES ==========
+// ========== FUNCIONES ==========
 function saltar(){
-  if(!saltoActivo && jugando){
-    saltoActivo = true;
-    perrito.classList.add('saltando');
-    setTimeout(()=>{
-      perrito.classList.remove('saltando');
-      saltoActivo = false;
-    },600);
+  // 🛑 Si está saltando: interrumpir, REINICIAR animación completamente
+  if(saltoActivo){
+    // Detener temporizador viejo
+    clearTimeout(window.timeoutSalto);
+    // Quitar clases y forzar reinicio visual
+    perrito.classList.remove('saltando');
+    saltoActivo = false;
+    // ✅ TRUCO CLAVE: pequeño retardo para que el navegador detecte el cambio y repita animación
+    void perrito.offsetWidth; 
   }
-}
 
-function agachar(activar){
-  if(jugando){
-    agachadoActivo = activar;
-    activar ? perrito.classList.add('agachado') : perrito.classList.remove('agachado');
-  }
+  // ✅ SIEMPRE cortar ladrido si está activo
+  perrito.classList.remove('ladrando');
+  ladrandoActivo = false;
+
+  // ✅ INICIAR SALTO NUEVO, AHORA SÍ REPITE ANIMACIÓN
+  saltoActivo = true;
+  perrito.classList.add('saltando');
+
+  // Guardamos temporizador para poder cancelarlo luego
+  window.timeoutSalto = setTimeout(()=>{
+    perrito.classList.remove('saltando');
+    saltoActivo = false;
+  }, 600);
 }
 
 function ladrar(){
-  if(jugando){
+  if(jugando && !ladrandoActivo){ // ✅ NUEVA VARIABLE SOLO PARA LADRIDO
+    ladrandoActivo = true;
     perrito.classList.add('ladrando');
-    setTimeout(()=> perrito.classList.remove('ladrando'), 600);
+    
     document.querySelectorAll('.destruible').forEach(obj=>{
       const pos = obj.getBoundingClientRect();
       const perPos = perrito.getBoundingClientRect();
-      if(pos.left - perPos.left < 100 && pos.left - perPos.left > 0){
+      if(pos.left - perPos.left < 140 && pos.left - perPos.left > -20 && !obj.classList.contains('eliminado')){
         obj.classList.add('eliminado');
-        puntos +=5; // Extra por destruir
+        puntos +=5;
         actualizarPuntos();
         setTimeout(()=> obj.remove(),200);
       }
     });
+
+    setTimeout(()=>{
+      perrito.classList.remove('ladrando');
+      ladrandoActivo=false;
+    },600);
   }
 }
 
-// ========== CREAR OBJETOS Y COLISIONES ==========
 function crearObjeto(){
   const info = listaObjetos[Math.floor(Math.random() * listaObjetos.length)];
   const obj = document.createElement('div');
@@ -293,9 +285,7 @@ function crearObjeto(){
   obj.innerText = info.emoji;
   obj.dataset.tipo = info.tipo;
 
-  if(info.tipo === 'agachar') obj.classList.add('alto');
   if(info.tipo === 'ladrar') obj.classList.add('destruible');
-
   areaJuego.appendChild(obj);
   obj.style.animationDuration = `${velocidad}s`;
 
@@ -303,55 +293,57 @@ function crearObjeto(){
     const pPer = perrito.getBoundingClientRect();
     const pObj = obj.getBoundingClientRect();
 
-    if(pObj.left < pPer.right - 30 && pObj.right > pPer.left + 5 && pObj.bottom > pPer.top + 2){
+    if(pObj.left < pPer.right - 20 && pObj.right > pPer.left + 5 && pObj.bottom > pPer.top + 2){
       let golpe = true;
 
       if(info.tipo === 'saltar' && saltoActivo) golpe=false;
-      if(info.tipo === 'agachar' && agachadoActivo) golpe=false;
       if(info.tipo === 'ladrar' && obj.classList.contains('eliminado')) golpe=false;
 
       if(golpe){
         clearInterval(revisarColision);
         finJuego();
-      } else {
-        if(pObj.right < pPer.left && !obj.pasado){
-          obj.pasado=true;
-          puntos +=1; // Punto por esquivar
-          actualizarPuntos();
-          // Aceleración progresiva + reducir distancia SIN AMONTONAR
-          if(puntos %10 ===0 && velocidad>1.6){
-            velocidad -=0.08;
-            if(distanciaMinima > 950){
-              distanciaMinima -= separacionExtra;
-              clearInterval(temporizadorObjetos);
-              temporizadorObjetos = setInterval(crearObjeto, distanciaMinima);
-            }
-          }
+      }
+    }
+
+    if(!obj.pasado && pObj.right < pPer.left){
+      obj.pasado = true;
+      puntos += 1; // ⭐ PUNTO POR ESQUIVAR
+      actualizarPuntos(); // ⭐ ACTUALIZA SIEMPRE
+      
+      // Aceleración y ajuste distancia
+      if(puntos %10 === 0 && velocidad > 1.6){
+        velocidad -= 0.08;
+        if(distanciaMinima > DISTANCIA_MINIMA_SEGURA){
+          distanciaMinima -= separacionExtra;
+          clearInterval(temporizadorObjetos);
+          temporizadorObjetos = setInterval(crearObjeto, distanciaMinima);
         }
       }
     }
 
     if(pObj.right <0){
-      clearInterval(revisarColision); // ✅ Limpieza para evitar errores
+      clearInterval(revisarColision);
       obj.remove();
     }
   },50);
 }
 
 function actualizarPuntos(){
-  puntosElem.innerText = puntos;
+  puntosElem.textContent = puntos;
 }
 
 function finJuego(){
   jugando=false;
   clearInterval(temporizadorObjetos);
-  finalPts.innerText = puntos;
+  finalPts.textContent = puntos;
   mensajeFin.classList.remove('oculto');
 }
 
 function iniciarJuego(){
-  puntos=0; velocidad=3.2; jugando=true;
-  distanciaMinima = 1400; // Restablece separación inicial
+  puntos=0; 
+  velocidad=3.2; 
+  jugando=true;
+  distanciaMinima = 3800;
   actualizarPuntos();
   mensajeFin.classList.add('oculto');
   document.querySelectorAll('.objeto').forEach(o=>o.remove());
@@ -359,16 +351,18 @@ function iniciarJuego(){
   temporizadorObjetos = setInterval(crearObjeto, distanciaMinima);
 }
 
-// ========== CONTROL TECLAS (bloqueo repetición rápida) ==========
+// --- CONTROLES SEPARADOS ---
 document.addEventListener('keydown', e=>{
-  if(teclaBloqueada) return;
-  if(e.key==='ArrowUp'){ saltar(); teclaBloqueada=true; e.preventDefault(); }
-  if(e.key==='ArrowDown'){ agachar(true); teclaBloqueada=true; e.preventDefault(); }
-  if(e.key==='ArrowRight'){ ladrar(); teclaBloqueada=true; e.preventDefault(); }
-});
-document.addEventListener('keyup',e=>{
-  if(e.key==='ArrowDown') agachar(false);
-  teclaBloqueada=false;
+  // 🆙 SALTAR: SIEMPRE LIBRE, SIN BLOQUEOS
+  if(e.key==='ArrowUp'){ 
+    saltar(); 
+    e.preventDefault(); 
+  }
+  // ➡️ LADRAR: SOLO SE BLOQUEA A SÍ MISMO, NO AFECTA SALTO
+  if(e.key==='ArrowRight' && !ladrandoActivo){ 
+    ladrar(); 
+    e.preventDefault(); 
+  }
 });
 
 window.onload = iniciarJuego;
