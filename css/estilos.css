@@ -32,22 +32,48 @@ body {
   line-height: 1.6;
 }
 
-/* Capa transparente ligera para que texto resalte SIEMPRE */
+/* Capa de fondo transparente: NO INTERFIERA */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background:rgba(255,252,242,0.82);
-  z-index:-1;
+  z-index:-2; /* Bajamos MÁS el índice para que no moleste */
+  pointer-events:none; /* 💡 CLAVE: no intercepta clics */
 }
 
 /* 🧭 Navegación dulce */
-.navbar{
+/* ===== CORRECCIÓN NAVBAR Y MENÚ ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999; /* ⚠️ MUY ALTO: siempre arriba */
   background: rgba(255,255,255,0.75);
   backdrop-filter: blur(10px);
-  border-radius:0 0 var(--redondeo) var(--redondeo);
+  border-radius: 0 0 var(--redondeo) var(--redondeo);
+  overflow: visible;
   box-shadow: var(--sombra-cute);
   padding:1rem 0;
+}
+/* Menú colapsado: asegurar que salga por ENCIMA */
+.navbar-collapse {
+  z-index: 1000;
+  position: relative;
+  background: rgba(255,255,255,0.92);
+  border-radius: 0 0 var(--redondeo) var(--redondeo);
+  padding-bottom: 0.5rem;
+}
+.navbar-collapse.collapse {
+  position: relative;
+}
+.navbar-collapse.show {
+  z-index: 1000;
+}
+/* Botón hamburguesa: también arriba */
+.navbar-toggler {
+  position: relative;
+  z-index: 1001;
+  border: none;
 }
 .navbar-brand{
   font-weight:800; font-size:1.35rem;
