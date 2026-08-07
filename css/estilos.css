@@ -144,6 +144,11 @@ body::before{
   box-shadow: 0 6px 15px rgba(255,143,177,0.25);
 }
 
+.btn-secundario {
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
 /* ✨ Animaciones kawaii */
 @keyframes flotar {
   0%{transform:translateY(0);}
